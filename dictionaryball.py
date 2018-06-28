@@ -38,46 +38,59 @@ def game_dict():
 
 game_dictionary = game_dict()
 
-nets_dict = game_dictionary['home']['players']
-hornets_dict = game_dictionary['away']['players']
+# creates list containing dictionaries for each team
+teams = [v['players'] for k,v in game_dictionary.items()]
 
-players_dict = nets_dict.copy()
-players_dict.update(hornets_dict)
+# creats one dictionary with all players, not separated by teams
+players = {}
+for team in teams:
+    players.update(team)
+
+# Raise 'must pass through a string' if not type(name) == str
+# Coerce
+# Act
+# Return
 
 def num_points_scored(player_name):
-    # Raise 'must pass through a string' if not type(name) == str
-    # Coerce
-    # Act
-    # Return
-    points_scored = 0
-    for player in players_dict.keys():
-        if player == player_name:
-            points_scored += players_dict [player]['points']
-    return points_scored
+    return players[player_name]['points']
+    ##### ALT METHOD ####
+        # points_scored = 0
+        # for player in players.keys():
+        #     if player == player_name:
+        #         points_scored += players[player]['points']
+        #return points
 #print(num_points_scored('Ben Gordon'))
 
 def shoe_size(player_name):
-    shoe_size = 0
-    for player in players_dict.keys():
-        if player == player_name:
-            shoe_size += players_dict[player]['shoe']
-    return shoe_size
+    return players[player_name]['shoe']
+    ##### ALT METHOD ####
+        # shoe_size = 0
+        # for player in players.keys():
+        #     if player == player_name:
+        #         shoe_size += players[player]['shoe']
+        # return shoe_size
 #print(shoe_size('Ben Gordon'))
 
 def team_colors(team_name):
-    team_colors = []
-    for location in game_dictionary.keys():
-        if game_dictionary[location]['team_name'] == team_name:
-            team_colors.extend(game_dictionary[location]['colors'])
-    return team_colors
+    return [color for k,v in game_dictionary.items() if v['team_name'] == team_name for color in v['colors']]
+            # team_colors = [['Turquoise', Purple]]
+        # could also use the flattened_colors loop to remove the outer list
+        # flattened_colors = [color for colors_pair in team_colors for color in colors_pair]
+    ##### ALT METHOD ####
+        # team_colors = []
+        # for location in game_dictionary.keys():
+        #     if game_dictionary[location]['team_name'] == team_name:
+        #         team_colors.extend(game_dictionary[location]['colors'])
+        # return team_colors
 #print(team_colors('Charlotte Hornets'))
 
 def team_names():
-    team_names = []
-    for location in game_dictionary.keys():
-        team_names.append(game_dictionary[location]['team_name'])
-    #team_names = [(k,v) for (k,v) in game_dictionary.keys() if v == (game_dictionary.values())]
-    return team_names
+    return [v['team_name'] for k,v in game_dictionary.items()]
+    ##### ALT METHOD ####
+        # team_names = []
+        # for location in game_dictionary.keys():
+        #     team_names.append(game_dictionary[location]['team_name'])
+        # return team_names
 #print(team_names())
 
 def player_numbers(team_name):
@@ -85,17 +98,15 @@ def player_numbers(team_name):
     for location in game_dictionary.keys():
         if (game_dictionary[location]['team_name']) == team_name:
             for player in (game_dictionary[location]['players']):
-                player_numbers.append(players_dict[player]['number'])
+                player_numbers.append(players[player]['number'])
     return player_numbers
 #print(player_numbers('Charlotte Hornets'))
 
 def player_stats(player_name):
-    player_stats = players_dict[player_name]
-    return (player_stats)
+    return players[player_name]
 #print(player_stats('Ben Gordon'))
 
 def big_shoe_rebounds():
-    players = players_dict
     shoe_list = [v['shoe'] for k, v in players.items()]
     biggest_shoe = max(shoe_list)
     player_largest_shoe = [k for k, v in players.items() if v['shoe'] == biggest_shoe]
@@ -105,7 +116,6 @@ def big_shoe_rebounds():
 #print(big_shoe_rebounds())
 
 def player_with_highest_stat(stat):
-    players = players_dict
     selected_stat = [v[stat] for k,v in players.items()]
     largest_stat = max(selected_stat)
     player_with_max_stat = [k for k,v in players.items() if v[stat] == largest_stat]
@@ -131,7 +141,6 @@ def winning_team():
 #print(winning_team())
 
 def player_with_longest_name():
-    players = players_dict
     player_names = [k for k, v in players.items()]
     name_length = []
     longest_named_player = []
@@ -149,7 +158,7 @@ def long_name_steals_a_ton():
     for player in player_with_highest_stat('steals'):
         if player in player_with_longest_name():
             return True
-print(long_name_steals_a_ton())
+#print(long_name_steals_a_ton())
 
 # def good_practices():
 #   for location, team_stats in game_dict().items():
